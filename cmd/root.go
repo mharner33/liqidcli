@@ -1,10 +1,8 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"net"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -13,29 +11,25 @@ var ipAddress string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "liqidcli  --ip <ip address>",
+	Use:   "liqidcli",
 	Short: "A CLI for interacting with Liqid API",
 	Long: `A Command Line Interface for calling Liqid API commands.  Typing just liqidcli and the 
 	IP address will return a summary of the current system toplogy, similar to using the "list" flag.
 
 	An example of this would be
-		liqidcli 10.204.103.30`,
-	Args: func(rootCmd *cobra.Command, args []string) error {
-		fmt.Printf("Length of args: %d", len(os.Args))
-		if len(os.Args) < 3 {
-			return errors.New("please specify the --ip flag with a valid IP address")
-		}
-		if net.ParseIP(os.Args[2]) == nil {
-			return fmt.Errorf("the IP address entered is not valid: %s ", os.Args[2])
+		liqidcli --ip 10.204.103.30`,
+	//Args: func(rootCmd *cobra.Command, args []string) error{},
+	// Uncomment the following line if your bare application
+	// has an action associated with it:
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if net.ParseIP(ipAddress) == nil {
+			return fmt.Errorf("invalid IP specified: %s", ipAddress)
 		}
 		return nil
 	},
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	
-	Run: func(cmd *cobra.Command, args []string) {
-
-	},
+	// Run: func(cmd *cobra.Command, args []string) {
+	// 	fmt.Printf("You typed IP: %s", ipAddress)
+	// },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -45,7 +39,7 @@ func Execute() {
 }
 
 func init() {
-
+	//cobra.OnInitialize(initConfig)
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
@@ -58,3 +52,7 @@ func init() {
 	rootCmd.Flags().StringVarP(&ipAddress, "ip", "i", "", "IP address of the Liqid UI")
 	rootCmd.MarkFlagRequired("ip")
 }
+
+// func initConfig(){
+
+// }

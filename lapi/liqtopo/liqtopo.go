@@ -1,11 +1,15 @@
 package liqtopo
 
 import (
-	"fmt"
+	"encoding/json"
 
 	"github.com/mharner33/liqidcli/lapi/liqutil"
 	"github.com/tidwall/gjson"
 )
+
+func SetupClient(path string) {
+
+}
 
 //Get the current fabric ID
 func GetFabID(resp []byte) string {
@@ -30,15 +34,19 @@ func GetDevicCnt(resp []byte, dcnt *liqutil.DevCounts) {
 	dcnt.Plx = results[4].Int()
 	dcnt.Fpga = results[5].Int()
 
-	fmt.Printf("In function - # of SSD: %d\n", dcnt.Ssd)
 }
 
-//Get the current groups and ID's - will probably need to return a map?
-func GetGroup(resp []byte) {
-
+//Get the current groups and ID's
+func GetGroup(resp []byte, garr []liqutil.Groups) {
+	json.Unmarshal(resp, &garr)
 }
 
 //List the current machines and their ID's  Will probably need to return a map?
 func GetMachines(resp []byte) {
+
+}
+
+func GetAll() {
+	//Get the fabric ID
 
 }
