@@ -21,32 +21,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var createType string
+// addCmd represents the add command
+var addCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add resources to a group or machine",
+	Long: `Adds resources such as SSD' or GPU' to a group or machine.
+ For example:
 
-// createCmd represents the create command
-var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "Create resources such as groups and machines",
-	Long: `This command creates any desired resources such as groups or machines in
-	the Liqid system.  Some examples include:
-	
-	liqidcli --ip 10.204.105.38 create --group mygroup
-	liqidcli --ip 10.204.106.130 create --machine mymachine`,
+liqidcli --ip 10.204.105.38 add`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create called")
+		fmt.Println("add called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(createCmd)
-	createCmd.Flags().StringVarP(&createType, "type", "t", "", "Display information about the Liqid environment.")
+	rootCmd.AddCommand(addCmd)
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

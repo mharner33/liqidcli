@@ -16,6 +16,23 @@ type Groups struct {
 	GroupName string `json:"group_name"`
 }
 
+//Struct for the 2.5 Version information
+type Version25 struct {
+	Response struct {
+		Data []struct {
+			Component      string `json:"component"`
+			Branch         string `json:"branch"`
+			Changeset      string `json:"changeset"`
+			Date           string `json:"date"` //was time.time
+			Version        string `json:"version"`
+			ChangesetShort string `json:"changeset_short"`
+			DateShort      string `json:"date_short"`
+		} `json:"data"`
+		Errors interface{} `json:"errors"`
+		Code   int         `json:"code"`
+	} `json:"response"`
+}
+
 //Basic list of groups in the system for a given fabric ID
 
 type GroupList struct {

@@ -18,26 +18,35 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/mharner33/liqidcli/lapi/liqtopo"
 	"github.com/spf13/cobra"
+)
+
+var apiPath = ":8080/liqid/api/v2/"
+var (
+	listType string
 )
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "List information about current infrastructure",
+	Long: `Gives information about the current Liqid infrastructure including
+	information on groups, machines and acclerator resources. For example:
+	liqidcli --ip 10.204.105.38 list all
+	
+	liqidcli --ip 10.204.105.38 list version`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		//fmt.Printf("list called with IP: %s", ipAddress)
+		basePath := "http://" + ipAddress + apiPath
+		fmt.Println(basePath)
+		liqtopo.ListSwitch(basePath, listType)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	listCmd.Flags().StringVarP(&listType, "type", "t", "", "Display information about the Liqid environment.")
 
 	// Here you will define your flags and configuration settings.
 
