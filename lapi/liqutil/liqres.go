@@ -49,40 +49,23 @@ type GroupList struct {
 }
 
 //Lists the resources inside each group
-type GroupResourceList struct {
+type GroupResource struct {
 	Response struct {
 		Data []struct {
-			Type        string `json:"type"`
-			Index       int    `json:"index"`
-			Name        string `json:"name"`
-			Flags       string `json:"flags"`
-			DeviceType  string `json:"device_type"`
-			DeviceState string `json:"device_state"`
-			FabricType  string `json:"fabric_type"`
-			ConnType    string `json:"conn_type"`
-			Lanes       int    `json:"lanes"`
-			DevID       string `json:"dev_id"`
-			SledID      string `json:"sled_id"`
-			FabrID      int    `json:"fabr_id"`
-			SwitGid     string `json:"swit_gid"`
-			PortGid     string `json:"port_gid"`
-			FabrGid     string `json:"fabr_gid"`
-			PodID       int    `json:"pod_id"`
-			Vid         string `json:"vid"`
-			Did         string `json:"did"`
-			Location    struct {
-				Rack  int `json:"rack"`
-				Shelf int `json:"shelf"`
-				Node  int `json:"node"`
-			} `json:"location"`
-			Owner struct {
-				Rack  int `json:"rack"`
-				Shelf int `json:"shelf"`
-				Node  int `json:"node"`
-			} `json:"owner"`
-			Unique     string `json:"unique,omitempty"`
-			Hconn      string `json:"hconn,omitempty"`
-			CapacityMB int    `json:"capacity(MB),omitempty"`
+			GrpID               int     `json:"grp_id"`
+			GroupName           string  `json:"group_name"`
+			CPUFrequency        float64 `json:"cpu-frequency"`
+			CPUCount            int     `json:"cpu-count"`
+			CPULanes            int     `json:"cpu-lanes"`
+			CPUCoreCount        int     `json:"cpu-core-count"`
+			TotalDram           int     `json:"total-dram"`
+			NetworkAdapterCount int     `json:"network-adapter-count"`
+			TotalThroughput     string  `json:"total-throughput"`
+			StorageDriveCount   int     `json:"storage-drive-count"`
+			TotalCapacity       int     `json:"total-capacity"`
+			GpuCount            int     `json:"gpu-count"`
+			GpuCores            int     `json:"gpu-cores"`
+			TotalMachines       int     `json:"total-machines"`
 		} `json:"data"`
 		Errors interface{} `json:"errors"`
 		Code   int         `json:"code"`

@@ -3,6 +3,8 @@ package liqtopo
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"strconv"
 
 	"github.com/mharner33/liqidcli/lapi/liqutil"
 	"github.com/tidwall/gjson"
@@ -44,29 +46,41 @@ func GetDevicCnt(dPath string) {
 	fmt.Printf("FPGA: %-10v\n", results[5].Int())
 }
 
+func GetGroupResource(grpPath string) {
+	var gRes liqutil.GroupResource
+	body := liqutil.CallAPI(grpPath)
+
+	err := json.Unmarshal(body, &gRes)
+	if err != nil {
+		fmt.Println("Unable to unmarshal group resource data.")
+		os.Exit(1)
+	}
+	fmt.Printf("\tCPU Count: %-10v\n", gRes.Response.Data[0].CPUCount)
+	fmt.Printf("\tGPU Count: %-10v\n", gRes.Response.Data[0].GpuCount)
+	fmt.Printf("\tSSD Count: %-10v\n", gRes.Response.Data[0].StorageDriveCount)
+
+}
+
 //Get the current groups and ID's
 func GetGroup(grpPath, fid string) {
 	//Create query string
+	var grp liqutil.GroupList
 	qstring := "?parameters=grp_id%3D" + fid
 	//fmt.Println(grpPath + qstring)
 	body := liqutil.CallAPI(grpPath + qstring)
 
-	result := gjson.Get(string(body), "response.data")
-	//resultName := gjson.Get(string(body), "response.data.#.group_name")
-	fmt.Printf("Group information for fabric: %s\n", fid)
-	fmt.Println(separator)
+	err := json.Unmarshal(body, &grp)
+	if err != nil {
+		fmt.Println("Error unmarshalling group data.")
+		os.Exit(1)
+	}
 
-	result.ForEach(func(key, value gjson.Result) bool {
-		fmt.Println(value.String())
-		return true
-	})
-	// for _, id := range resultID.Array() {
-	// 	fmt.Printf("Group ID: %s\n", id.String())
-	// 	// result2 := gjson.Get(string(body), "response.data.#.group_name")
-	// 	// for _, name := range result2.Array() {
-	// 	// 	fmt.Printf("Group Name: %v\n", name)
-	// 	// }
-	// }
+	for _, g := range grp.Response.Data {
+		fmt.Printf("Group ID: %-10v", g.GrpID)
+		fmt.Printf("Group Name: %v\n", g.GroupName)
+		GetGroupResource(grpPath + "/details/" + strconv.Itoa(g.GrpID))
+	}
+
 }
 
 //List the current machines and their ID's  Will probably need to return a map?

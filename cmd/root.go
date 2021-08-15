@@ -28,6 +28,7 @@ var rootCmd = &cobra.Command{
 		}
 		return nil
 	},
+	//Args: cobra.MinimumNArgs(1),
 	// Run: func(cmd *cobra.Command, args []string) {
 	// 	fmt.Printf("You typed IP: %s", ipAddress)
 	// },

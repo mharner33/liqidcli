@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/mharner33/liqidcli/lapi/liqtopo"
 	"github.com/spf13/cobra"
 )
@@ -32,14 +30,13 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List information about current infrastructure",
 	Long: `Gives information about the current Liqid infrastructure including
-	information on groups, machines and acclerator resources. For example:
+	information on groups, machines and acclerator resources.  For example:
 	liqidcli --ip 10.204.105.38 list all
 	
 	liqidcli --ip 10.204.105.38 list version`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Printf("list called with IP: %s", ipAddress)
 		basePath := "http://" + ipAddress + apiPath
-		fmt.Println(basePath)
 		liqtopo.ListSwitch(basePath, listType)
 	},
 }
@@ -47,6 +44,7 @@ var listCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(listCmd)
 	listCmd.Flags().StringVarP(&listType, "type", "t", "", "Display information about the Liqid environment.")
+	listCmd.MarkFlagRequired("type")
 
 	// Here you will define your flags and configuration settings.
 
