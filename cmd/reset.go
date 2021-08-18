@@ -28,7 +28,7 @@ import (
 // resetCmd represents the reset command
 var resetCmd = &cobra.Command{
 	Use:   "reset",
-	Short: "Perform a reset on the liqid environment",
+	Short: "Perform a reset on the Liqid environment",
 	Long: `Removes all device configuration information (groups, machines etc.) and 
 	returns them back to the free pool. For example:
 
@@ -38,7 +38,7 @@ var resetCmd = &cobra.Command{
 		fmt.Print("Are you sure you want to perform a reset (y/n)?")
 		fmt.Scanln(&ack)
 		if strings.ToLower(ack) == "y" {
-			fmt.Println("Resetting the system..")
+			fmt.Println("Resetting the system...")
 			_, err := http.Post("http://"+ipAddress+liqutil.ApiPath+"system/state/reset", "application/json", bytes.NewBuffer(nil))
 			if err != nil {
 				fmt.Printf("Post request for system reset failed: %s\n", err)
