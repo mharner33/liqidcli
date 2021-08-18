@@ -17,29 +17,61 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
+	"github.com/mharner33/liqidcli/lapi/liqcrud"
+	"github.com/mharner33/liqidcli/lapi/liqtopo"
+	"github.com/mharner33/liqidcli/lapi/liqutil"
 	"github.com/spf13/cobra"
 )
 
 var createType string
+var name string
+var gid string
 
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create resources such as groups and machines",
 	Long: `This command creates any desired resources such as groups or machines in
-	the Liqid system.  Some examples include:
+	the Liqid system.  
+	Valid types:  group <group name>, machine <machine name> <group id>
 	
-	liqidcli --ip 10.204.105.38 create --group mygroup
-	liqidcli --ip 10.204.106.130 create --machine mymachine`,
+	Some examples include:
+	
+	liqidcli --ip 10.204.105.38 create --type group --name mygroup
+	liqidcli --ip 10.204.106.130 create --type machine mymachine 1`,
+
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create called")
+		createType = strings.ToLower(createType)
+		basePath := "http://" + ipAddress + liqutil.ApiPath
+		fmt.Println(basePath + createType)
+		fabid := liqtopo.GetFabID(basePath + "fabric/id")
+		var GrpInfo liqutil.CreateGrpStruct
+		switch createType {
+		case "group":
+
+			gid := liqutil.GetNext(basePath, "group")
+
+			GrpInfo.FabID, _ = strconv.Atoi(fabid)
+			GrpInfo.GrpName = name
+			GrpInfo.GrpID = gid
+			GrpInfo.PodID = -1
+			liqcrud.CreateGroup(basePath+createType, GrpInfo)
+		default:
+
+		}
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(createCmd)
 	createCmd.Flags().StringVarP(&createType, "type", "t", "", "Display information about the Liqid environment.")
+	createCmd.Flags().StringVarP(&name, "name", "n", "Test123", "The name of the group or machine to create.")
+	createCmd.Flags().StringVarP(&gid, "gid", "g", "", "Group ID in which to create the machine in.")
+	createCmd.MarkFlagRequired("type")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

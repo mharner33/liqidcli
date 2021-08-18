@@ -1,6 +1,7 @@
 package liqutil
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -26,4 +27,21 @@ func CallAPI(urlPath string) []byte {
 		os.Exit(2)
 	}
 	return bodyBytes
+}
+
+//Get the next ID for creating either a Group or a Machine
+func GetNext(basePath, t string) int {
+	var nxtid NextGrpID
+
+	body := CallAPI(basePath + t + "/nextid")
+	err := json.Unmarshal(body, &nxtid)
+	if err != nil {
+		fmt.Println("Unable to unmarshal json in GetNext.")
+		os.Exit(1)
+	}
+	return nxtid.Response.Data[0]
+}
+
+func PostAPI(basePath string, param CreateGrpStruct) {
+
 }
